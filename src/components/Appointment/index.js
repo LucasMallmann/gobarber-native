@@ -1,9 +1,10 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { parseISO, formatRelative } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 import PropTypes from 'prop-types';
+import { ConfirmDialog } from 'react-native-simple-dialogs';
 
 import { Container, Left, Avatar, Info, Name, Time } from './styles';
 
@@ -15,8 +16,30 @@ export default function Appointments({ data, onCancel }) {
     });
   }, [data.date]);
 
+  const [modalVisible, setModalVisible] = useState(false);
+
+  function handleConfirm() {
+    onCancel();
+    setModalVisible(false);
+  }
+
   return (
     <Container past={data.past}>
+      <ConfirmDialog
+        title="Excluir o agendamento"
+        message="Tem certeza que deseja excluir seu agendamento?"
+        visible={modalVisible}
+        onTouchOutside={() => setModalVisible(false)}
+        positiveButton={{
+          title: 'Sim',
+          onPress: handleConfirm,
+        }}
+        negativeButton={{
+          title: 'Não',
+          onPress: () => setModalVisible(false),
+        }}
+      />
+
       <Left>
         <Avatar
           source={{
@@ -33,7 +56,7 @@ export default function Appointments({ data, onCancel }) {
       </Left>
 
       {data.cancelable && !data.canceled_at && (
-        <TouchableOpacity onPress={onCancel}>
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
           <Icon name="event-busy" size={20} color="#f64c75" />
         </TouchableOpacity>
       )}
