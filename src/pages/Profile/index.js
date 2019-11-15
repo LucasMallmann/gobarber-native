@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { ActionCreators as UserActions } from '~/store/ducks/user';
+import { ActionCreators as AuthActions } from '~/store/ducks/auth';
 
 import Background from '~/components/Background';
 
@@ -13,6 +14,7 @@ import {
   Form,
   FormInput,
   SubmitButton,
+  LogoutButton,
 } from './styles';
 
 export default function Profile() {
@@ -41,6 +43,10 @@ export default function Profile() {
         confirmPassword,
       }),
     );
+  }
+
+  function handleLogout() {
+    dispatch(AuthActions.signOut());
   }
 
   useEffect(() => {
@@ -119,6 +125,8 @@ export default function Profile() {
           <SubmitButton onPress={handleSubmit} loading={loading}>
             Atualizar perfil
           </SubmitButton>
+
+          <LogoutButton onPress={handleLogout}>Sair do GoBarber</LogoutButton>
         </Form>
       </Container>
     </Background>

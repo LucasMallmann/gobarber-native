@@ -37,6 +37,11 @@ export const SubmitButton = styled(Button)`
   margin-top: 10px;
 `;
 
+export const LogoutButton = styled(Button)`
+  background: #f64c75;
+  margin-top: 10px;
+`;
+
 export const SignLink = styled.TouchableOpacity`
   margin-top: 20px;
 `;

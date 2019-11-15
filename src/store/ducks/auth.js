@@ -60,6 +60,7 @@ export const ActionCreators = {
 };
 
 export default function auth(state = initialState, action) {
+  // eslint-disable-next-line consistent-return
   return produce(state, draft => {
     switch (action.type) {
       case Types.SING_IN_SUCCESS: {
