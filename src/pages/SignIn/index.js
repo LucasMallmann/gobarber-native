@@ -1,8 +1,11 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Image } from 'react-native';
 import PropTypes from 'prop-types';
 
 import logo from '~/assets/logo.png';
+
+import { ActionCreators as AuthActions } from '~/store/ducks/auth';
 
 import Background from '~/components/Background';
 
@@ -16,9 +19,17 @@ import {
 } from './styles';
 
 export default function SignIn({ navigation }) {
-  const passwordRef = useRef();
+  const dispatch = useDispatch();
 
-  function handleSubmit() {}
+  const passwordRef = useRef();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const loading = useSelector(state => state.auth.loading);
+
+  function handleSubmit() {
+    dispatch(AuthActions.singInRequest(email, password));
+  }
 
   return (
     <Background>
@@ -34,18 +45,25 @@ export default function SignIn({ navigation }) {
             placeholder="Digite seu e-mail"
             returnKeyType="next"
             onSubmitEditing={() => passwordRef.current.focus()}
+            value={email}
+            onChangeText={setEmail}
           />
 
           <FormInput
             icon="lock-outline"
             secureTextEntry
             placeholder="Digite sua senha secreta"
+            autoCapitalize="none"
             ref={passwordRef}
             returnKeyType="send"
             onSubmitEditing={handleSubmit}
+            value={password}
+            onChangeText={setPassword}
           />
 
-          <SubmitButton onPress={handleSubmit}>Acessar</SubmitButton>
+          <SubmitButton onPress={handleSubmit} loading={loading}>
+            Acessar
+          </SubmitButton>
         </Form>
 
         <SignLink>
